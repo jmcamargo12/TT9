@@ -1,0 +1,142 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-2 offset-2">
+      <h2 id="logo"><SUB>EAT</SUB> A BURGER</h2>
+    </div>
+  </div>
+  <br>
+
+  <div class="col-4 ">
+    <img src="https://media.giphy.com/media/PipPvXqEh1gX9uc9Nt/giphy.gif" alt="Smiley face" height="150px" width="150
+        px" style="border-radius: 50%; ;
+  margin-left: 40px ;margin-top:-20px
+ ">
+  </div>
+
+
+  <h3 style="margin-left:150px;">Welcome to Eat a Burger</h3>
+  <p style=" text-align: center;
+ ">Where you don't have to dream about the burgers you want to eat, you can just make a list
+    and go
+    for them</p>
+
+
+  <div class="row" style="display: flex;">
+    <div class="col-12"
+      style="display: flex; background: rgba(210, 180, 140, 0.12);  border-bottom-left-radius: 95%;border-top-right-radius: 95%;">
+      <div col=" col-4 offset-5" style="float-left;margin-left: 100px;">
+        <h1 style="background: antiquewhite;
+    border-radius: 45px;">Burger List</h1>
+
+
+
+        <ul style=" list-style-type: none;  list-style:none;">
+          {{#each burgers}}
+          <li>
+            <p>
+              {{this.id}}. {{this.burger}}
+
+              <button data-burgerid="{{this.id}}" class="delburger">Delete</button>
+            </p>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div col="col-4 offset-5" style="    margin-left: 35px;
+    float-left: ;
+    background: antiquewhite;
+    border-radius: 25px;
+    border: 15px solid white;
+}">
+        <h2>Add a burger</h2>
+        <form id="createburger" class="button-size">
+          <textarea type="text" name="burger"></textarea>
+          <button type="submit">Save the Burger</button>
+        </form>
+      </div>
+
+
+      <div col="col-4 offset-5" style="float-left;background: aliceblue;     background: aliceblue;
+    border: 10px solid white;
+    border-radius: 4%;border-top-right-radius: 95%;">
+        <h2>Change a Burger</h2>
+        <p>Not sure about a burger?</p>
+        <form id="updateburger" class="button-size">
+          <select name="id">
+            {{#each burgers}}
+            <option value="{{this.id}}">{{this.burger}}</option>
+            {{/each}}
+          </select>
+          <textarea type="text" name="burger" placeholder="burger"></textarea>
+          <button type="submit">Change Your Hamburger!</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    $(".delburger").on("click", function (event) {
+      // Get the ID from the button.
+      // This is shorthand for $(this).attr("data-planid")
+      var id = $(this).data("burgerid");
+
+      // Send the DELETE request.
+      $.ajax("/api/burgers/" + id, {
+        type: "DELETE"
+      }).then(
+        function () {
+          console.log("deleted id ", id);
+          // Reload the page to get the updated list
+          location.reload();
+        }
+      );
+    });
+
+    $("#createburger").on("submit", function (event) {
+      // Make sure to preventDefault on a submit event.
+      event.preventDefault();
+
+      // [name=plan] will find an element with a "name" attribute equal to the string "plan"
+      var newBurger = {
+        burger: $("#createburger [name=burger]").val().trim()
+      };
+
+      // Send the POST request.
+      $.ajax("/api/burgers", {
+        type: "POST",
+        data: newBurger
+      }).then(
+        function () {
+          console.log("created new plan");
+          // Reload the page to get the updated list
+          location.reload();
+        }
+      );
+    });
+
+    $("#updateburger").on("submit", function (event) {
+      // Make sure to preventDefault on a submit event.
+      event.preventDefault();
+
+      // Get the ID by finding an element with a "name" attribute equal to the string "id"
+      var id = $("[name=id]").val().trim();
+
+      var updatedBurger = {
+        burger: $("#updateburger [name=burger]").val().trim()
+      };
+
+      // Send the PUT request.
+      $.ajax("/api/burgers/" + id, {
+        type: "PUT",
+        data: updatedBurger
+      }).then(
+        function () {
+          console.log("updated id ", id);
+          // Reload the page to get the updated list
+          location.reload();
+        }
+      );
+    });
+  </script>
+</div>

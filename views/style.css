@@ -1,0 +1,9 @@
+#logo {
+  height: 25px;
+  background-color: blueviolet;
+}
+
+body {
+  background-color: blue;
+  border-bottom-left-radius: 35%;
+}
